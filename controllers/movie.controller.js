@@ -19,9 +19,32 @@ const createMovie = async(req,res) => {
             message:"Something went Wrong",
             error:err,
             data:{},
-            success:true
+            success:false
            })
     }
 }
 
-module.exports = {createMovie}
+const deleteMovie = async(req,res) => {
+    try{
+        const response = await movieModel.deleteOne({
+            _id:req.params.movieId
+        })
+        return res.status(200).json({
+            success:true,
+            error:{},
+            data:response,
+            message:"Succesfully deleted the movie"
+        })
+
+    }
+    catch(err){
+           return res.status(500).json({
+            success:false,
+            error:err,
+            data:{},
+            message:"Something went wrong"
+           })
+    }
+}
+
+module.exports = {createMovie,deleteMovie}
