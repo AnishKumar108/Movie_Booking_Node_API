@@ -13,10 +13,18 @@ const movieSchema = new mongoose.Schema({
         type:[String],
         required: true
     },
+    trailerUrl:{
+        type: String,
+        required:true
+    },
     language:{
         type:String,
         required:true,
         default:"English"
+    },
+    director:{
+        type:String,
+        required:true
     },
     releaseDate:{
         type:String,
