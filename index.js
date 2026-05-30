@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require('body-parser')
 const mongoose = require("mongoose")
+const Movie = require("./models/movie.model")
 const env = require("dotenv")
 env.config()
 
@@ -25,6 +26,8 @@ app.listen(process.env.PORT , async() => {
     try{
         await mongoose.connect(process.env.DB_URL)
         console.log("Succesfully connected to mongodb server")
+
+        
 
     }
     catch(err){
