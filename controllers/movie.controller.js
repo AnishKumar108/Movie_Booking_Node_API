@@ -7,13 +7,20 @@ const {errorResponseBody,successResponseBody} = require("../utils/responseBody")
 const createMovie = async(req,res) => {
 
     try{
-         const movie = await movieService.createMovie(req.body)
+        
+         const response = await movieService.createMovie(req.body)
+         if(response.err){
+            errorResponseBody.error = response.err
+            errorResponseBody.message = "Validation Error, something invalid coming from request body "
+            return res.status(response.code).json(errorResponseBody)
+         }
          successResponseBody.message = "Succesfully Created the movie"
          successResponseBody.data = movie
          return res.status(201).json(successResponseBody)
 
     }
     catch(err){
+           console.log(err)
            errorResponseBody.error  = err
            return res.status(500).json(errorResponseBody)
     }
