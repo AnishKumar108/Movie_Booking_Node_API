@@ -15,7 +15,7 @@ const createMovie = async(req,res) => {
             return res.status(response.code).json(errorResponseBody)
          }
          successResponseBody.message = "Succesfully Created the movie"
-         successResponseBody.data = movie
+         successResponseBody.data = response
          return res.status(201).json(successResponseBody)
 
     }
@@ -65,4 +65,42 @@ const getMovieById = async(req,res) => {
     }
 }
 
-module.exports = {createMovie,deleteMovie,getMovieById}
+const updateMovie = async(req,res) => {
+    try{
+        const response = await movieService.updateMovie(req.params.id,req.body)
+        if (response.err){
+            errorResponseBody.error = response.err
+            errorResponseBody.message = "Some invalid request from request body is coming"
+            return res.status(response.code).json(errorResponseBody)
+        }
+        successResponseBody.data = response
+        return res.status(200).json(successResponseBody)
+    }
+    catch(err){
+        console.log(err)
+        errorResponseBody.error = err
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+
+const getMovies = async(req,res) => {
+    try{
+        const response = await movieService.fetchMovies(req.query)
+        if(response.err){
+            errorResponseBody.error = response.err;
+            return res.status(response.code).json(errorResponseBody)
+        }
+        successResponseBody.data = response
+        successResponseBody.message = "Succesfully fetched the movie's"
+        return res.status(200).json(successResponseBody)
+    }
+    catch(error){
+        errorResponseBody.error = error
+        res.status(500).json(errorResponseBody)
+    }
+
+}
+
+
+module.exports = {createMovie,deleteMovie,getMovieById,updateMovie,getMovies}

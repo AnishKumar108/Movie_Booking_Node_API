@@ -8,6 +8,12 @@ const route = (app) => {
 
     app.get("/mba/api/v1/movies/:id" , movieController.getMovieById)
 
+    app.put("/mba/api/v1/movies/:id", movieController.updateMovie)
+
+    app.patch("/mba/api/v1/movies/:id", movieController.updateMovie)
+
+    app.get("/mba/api/v1/movies",movieController.getMovies)
+
 }
 
 module.exports = route

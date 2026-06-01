@@ -46,4 +46,41 @@ const getMovieById = async(id) => {
 
 }
 
-module.exports = {createMovie , deleteMovie , getMovieById}
+const updateMovie = async(id, data) => {
+    try{
+        const movie = await movieModel.findByIdAndUpdate(id,data,{new:true,runValidators:true})
+        return movie
+    }
+    catch(error){
+        if(error.name === "ValidationError"){
+             const err = {}
+             Object.keys(error.errors).forEach((key) => {
+                err[key] = error.errors[key].message
+             })
+             console.log(err)
+             return {err:err,code:422}
+        }
+        else{
+            throw error
+        }
+    }
+}
+ 
+const fetchMovies = async(filter) => {
+    const query = {}
+    if(filter.name){
+        query.name = filter.name
+    }
+    const response = await movieModel.find(query)
+    
+    if(response.length === 0){
+        
+        return {
+            err:"Cannot find movie with the given name",
+            code:404
+        }
+    }
+    return response
+}
+
+module.exports = {createMovie , deleteMovie , getMovieById , updateMovie ,fetchMovies}
