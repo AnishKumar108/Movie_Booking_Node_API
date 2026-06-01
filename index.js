@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require('body-parser')
 const mongoose = require("mongoose")
+const Movie = require("./models/movie.model")
+const movieRoute = require("./routes/movie.route")
 const env = require("dotenv")
 env.config()
 
@@ -9,7 +11,7 @@ const app = express();
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
 
-
+movieRoute(app);
 
 app.get("/home" , (req,res) => {
     console.log("Hitted Homes")
@@ -25,6 +27,8 @@ app.listen(process.env.PORT , async() => {
     try{
         await mongoose.connect(process.env.DB_URL)
         console.log("Succesfully connected to mongodb server")
+
+        
 
     }
     catch(err){
