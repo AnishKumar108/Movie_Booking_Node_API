@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const mongoose = require("mongoose")
 const Movie = require("./models/movie.model")
 const movieRoute = require("./routes/movie.route")
+const theatreRoute = require("./routes/theatre.route")
 const env = require("dotenv")
 env.config()
 
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
 
 movieRoute(app);
+theatreRoute(app);
 
 app.get("/home" , (req,res) => {
     console.log("Hitted Homes")
