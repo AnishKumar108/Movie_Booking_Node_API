@@ -25,4 +25,30 @@ const checkCreateTheatreRequest = async(req,res,next) => {
         next()
 }
 
-module.exports = {checkCreateTheatreRequest}
+const checkUpdateMoviesRequest = async(req,res,next) => {
+    if(req.body.insert === undefined){
+        errorResponseBody.error = "Insert in not present in request body"
+        return res.status(400).json(errorResponseBody)
+    }
+
+    if(!req.body.movieIds){
+        errorResponseBody.error = "movieIds in not present in request body"
+        return res.status(400).json(errorResponseBody)
+
+    }
+
+    if(!(req.body.movieIds instanceof Array)){
+        errorResponseBody.error = "movieIds in not an array"
+        return res.status(400).json(errorResponseBody)
+        
+    }
+    if(req.body.movieIds.length === 0){
+        errorResponseBody.error = "there should be some movie id in array"
+        return res.status(400).json(errorResponseBody)
+        
+    }
+
+    next()
+}
+
+module.exports = {checkCreateTheatreRequest,checkUpdateMoviesRequest}
