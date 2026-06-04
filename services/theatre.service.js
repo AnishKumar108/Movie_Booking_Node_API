@@ -37,9 +37,23 @@ const getTheatre = async (id) => {
   return response;
 };
 
-const getAllTheatres = async () => {
+const getAllTheatres = async (data) => {
   try {
-    const response = await Theatre.find({});
+    let query = {}
+    if(data && data.city){
+      query.city = data.city
+    }
+
+    if(data && data.pincode){
+      query.pincode = data.pincode
+    }
+
+    if(data && data.name){
+      query.name = data.name
+    }
+
+
+    const response = await Theatre.find(query);
     return response;
   } catch (error) {
     console.log(error);
