@@ -39,36 +39,62 @@ const getTheatre = async (id) => {
 
 const getAllTheatres = async (data) => {
   try {
-    let query = {}
-    let pagination = {}
-    if(data && data.city){
-      query.city = data.city
+    let query = {};
+    let pagination = {};
+    if (data && data.city) {
+      query.city = data.city;
     }
 
-    if(data && data.pincode){
-      query.pincode = data.pincode
+    if (data && data.pincode) {
+      query.pincode = data.pincode;
     }
 
-    if(data && data.name){
-      query.name = data.name
+    if (data && data.name) {
+      query.name = data.name;
     }
 
-    if(data && data.limit){
-      pagination.limit = data.limit
+    if (data && data.limit) {
+      pagination.limit = data.limit;
     }
 
-    if(data && data.skip){
-      let perPage = (data.limit)?data.limit:3;
-      pagination.skip = data.skip*perPage;
+    if (data && data.skip) {
+      let perPage = data.limit ? data.limit : 3;
+      pagination.skip = data.skip * perPage;
     }
 
-
-
-    const response = await Theatre.find(query,{},pagination);
+    const response = await Theatre.find(query, {}, pagination);
     return response;
   } catch (error) {
     console.log(error);
     throw error;
+  }
+};
+
+const updateTheatre = async (id, data) => {
+  try {
+    const response = await Theatre.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    });
+    
+    if(!response){
+      return {err:"Not Found Theatre with given id", code:404};
+    }
+     return response
+  } catch (error) {
+    console.log(error);
+    if (error.name === "ValidationError") {
+      const err = {};
+      Object.keys(error.errors).forEach((key) => {
+        err[key] = error.errors[key].message;
+      });
+      console.log(err);
+      return { err: err, code: 422 }
+    }
+    else{
+      throw error;
+    }
+    
   }
 };
 
@@ -79,18 +105,25 @@ const updateMoviesInTheatres = async (theatreId, insert, movieIds) => {
   }
 
   if (insert) {
-    movieIds.forEach(movieId => {
+    movieIds.forEach((movieId) => {
       theatre.movies.push(movieId);
     });
   } else {
     let savedMovieIds = theatre.movies;
-    movieIds.forEach(movieId => {
+    movieIds.forEach((movieId) => {
       savedMovieIds = savedMovieIds.filter((smi) => smi === movieId);
     });
-    theatre.movies = savedMovieIds
+    theatre.movies = savedMovieIds;
   }
   await theatre.save();
-  return theatre.populate("movies")
+  return theatre.populate("movies");
 };
 
-module.exports = { createTheatre, destroyTheatre, getTheatre, getAllTheatres , updateMoviesInTheatres };
+module.exports = {
+  createTheatre,
+  destroyTheatre,
+  getTheatre,
+  getAllTheatres,
+  updateTheatre,
+  updateMoviesInTheatres,
+};

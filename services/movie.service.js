@@ -1,4 +1,5 @@
 const movieModel = require("../models/movie.model")
+const { successResponseBody } = require("../utils/responseBody")
 
 const createMovie = async(data) => {
     try{
@@ -49,7 +50,12 @@ const getMovieById = async(id) => {
 const updateMovie = async(id, data) => {
     try{
         const movie = await movieModel.findByIdAndUpdate(id,data,{new:true,runValidators:true})
+        if(!movie){
+            return {err:"Not found movie with given id" , code:404}
+        }
+
         return movie
+
     }
     catch(error){
         if(error.name === "ValidationError"){
