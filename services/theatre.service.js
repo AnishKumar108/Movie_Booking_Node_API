@@ -53,6 +53,10 @@ const getAllTheatres = async (data) => {
       query.name = data.name;
     }
 
+    if(data && data.movieId){
+      query.movies = {$all:data.movieId}
+    }
+
     if (data && data.limit) {
       pagination.limit = data.limit;
     }
