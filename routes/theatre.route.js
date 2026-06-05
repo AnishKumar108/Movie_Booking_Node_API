@@ -9,6 +9,7 @@ const routes = (app) => {
     app.patch("/mba/api/v1/theatres/:id",theatreController.update)
     app.put("/mba/api/v1/theatres/:id",theatreController.update)
     app.patch("/mba/api/v1/theatres/:id/movies" ,checkUpdateMoviesRequest, theatreController.updateMoviesInTheatre)
+    app.get("/mba/api/v1/theatres/:id/movies",theatreController.getMovies)
 }
 
 module.exports = routes
