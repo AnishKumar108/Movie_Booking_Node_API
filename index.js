@@ -4,6 +4,7 @@ const mongoose = require("mongoose")
 const Movie = require("./models/movie.model")
 const movieRoute = require("./routes/movie.route")
 const theatreRoute = require("./routes/theatre.route")
+const authRoute = require("./routes/auth.route")
 const env = require("dotenv")
 env.config()
 
@@ -14,6 +15,7 @@ app.use(bodyParser.json())
 
 movieRoute(app);
 theatreRoute(app);
+authRoute(app);
 
 app.get("/home" , (req,res) => {
     console.log("Hitted Homes")
