@@ -1,27 +1,33 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const theatreSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
-        minLength:5
+const theatreSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      minLength: 5,
     },
-    description:String,
-    address:{
-        type:String,
-        required:true
+    description: String,
+    movies: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Movie",
     },
-    city:{
-        type:String,
-        required:true
+    address: {
+      type: String,
+      required: true,
     },
-    pincode:{
-        type:Number,
-        required:true
-    }
+    city: {
+      type: String,
+      required: true,
+    },
+    pincode: {
+      type: Number,
+      required: true,
+    },
+  },
+  { timestamps: true },
+);
 
-},{timestamps:true})
+const Theatre = mongoose.model("Theatre", theatreSchema);
 
-const Theatre = mongoose.model("Theatre",theatreSchema);
-
-module.exports = Theatre
+module.exports = Theatre;

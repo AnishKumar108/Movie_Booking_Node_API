@@ -70,7 +70,7 @@ const updateMovie = async(req,res) => {
         const response = await movieService.updateMovie(req.params.id,req.body)
         if (response.err){
             errorResponseBody.error = response.err
-            errorResponseBody.message = "Some invalid request from request body is coming"
+            
             return res.status(response.code).json(errorResponseBody)
         }
         successResponseBody.data = response
