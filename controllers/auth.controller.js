@@ -31,7 +31,7 @@ const signIn = async(req,res) => {
         
         const token = jwt.sign({id:user._id,email:user.email},process.env.AUTH_KEY,{expiresIn:"1h"})
 
-        console.log(jwt.verify(token,process.env.AUTH_KEY))
+        
         successResponseBody.data = {
             email:user.email,
             Role:user.userRole,
