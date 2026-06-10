@@ -1,4 +1,6 @@
 const {errorResponseBody} = require("../utils/responseBody")
+const jwt = require("jsonwebtoken")
+const authService = require("../services/auth.service")
 
 const checkSignupRequest = async(req,res,next) => {
     if(!req.body.name){
@@ -29,4 +31,37 @@ const checkSignInRequest = async(req,res,next) => {
     next()
 }
 
-module.exports = {checkSignupRequest,checkSignInRequest}
+const isAuthenticated = async(req,res,next) => {
+    try{
+        const token = req.headers["x-access-token"];
+        if(!token){
+            errorResponseBody.error = "No token provided";
+            return res.status(403).json(errorResponseBody)
+        }
+        const response = jwt.verify(token,process.env.AUTH_KEY);
+        if(!response){
+            errorResponseBody.error = "Token not verified";
+            return res.status(401).json(errorResponseBody)
+        }
+        const user = await authService.getuserbyId(response.id);
+        req.user = user.id;
+        next()
+
+
+    }
+    catch(error){
+        if(error.name == "JsonWebTokenError"){
+            errorResponseBody.error = error.message;
+            return res.status(401).json(errorResponseBody)
+        }
+        if(error.err){
+            errorResponseBody.error = error.err;
+            return res.status(error.code).json(errorResponseBody)
+        }
+        console.log(error);
+        errorResponseBody.error = error
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+module.exports = {checkSignupRequest,checkSignInRequest,isAuthenticated}

@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const { errorResponseBody } = require("../utils/responseBody");
 
 const createUser = async (data) => {
   try {
@@ -30,4 +31,18 @@ const getUserByEmail = async(email) => {
     }
 }
 
-module.exports = { createUser,getUserByEmail };
+const getuserbyId = async(id) => {
+  try{
+    const response = await User.findById(id);
+    
+    if(!response){
+      throw{err:"No user found with given id",code:404}
+    }
+    return response
+  }
+  catch(error){
+    throw error
+  }
+}
+
+module.exports = { createUser,getUserByEmail ,getuserbyId};
