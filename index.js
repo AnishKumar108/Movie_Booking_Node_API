@@ -5,6 +5,7 @@ const Movie = require("./models/movie.model")
 const movieRoute = require("./routes/movie.route")
 const theatreRoute = require("./routes/theatre.route")
 const authRoute = require("./routes/auth.route")
+const userRoute = require("./routes/user.route")
 const env = require("dotenv")
 env.config()
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json())
 movieRoute(app);
 theatreRoute(app);
 authRoute(app);
+userRoute(app);
 
 app.get("/home" , (req,res) => {
     console.log("Hitted Homes")

@@ -45,4 +45,26 @@ const getuserbyId = async(id) => {
   }
 }
 
-module.exports = { createUser,getUserByEmail ,getuserbyId};
+const updateUserRoleOrStatus = async(data,userId) => {
+  try{
+    const user = await User.findById(userId);
+    if(!user){
+      throw {err:"No user found with given user id",code:404}
+    };
+    let dataQuery = {}
+    if(data.userRole){
+      dataQuery.userRole = data.userRole
+    }
+    if(data.userStatus){
+      dataQuery.userStatus = data.userStatus
+    }
+    const response = await user.updateOne(dataQuery,{new:true,runValidators:true});
+    return response
+  }
+  catch(error){
+    console.log(error);
+    throw error
+}
+}
+
+module.exports = { createUser,getUserByEmail ,getuserbyId,updateUserRoleOrStatus};
