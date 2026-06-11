@@ -50,5 +50,29 @@ const signIn = async(req,res) => {
     }
 }
 
+const resetPassword = async(req,res) => {
+    try{
+        const user  = await userService.getuserbyId(req.user);
+        const isOldPasswordCorrect = await user.isValidPassword(req.body.oldPassword);
+        if(!isOldPasswordCorrect){
+            throw{err:"Invalid old password,Please provide correct old password",code:403}
+        };
+        user.password = req.body.newPassword;
+        await user.save()
+        successResponseBody.message = "Succesfully reset the old password";
+        successResponseBody.data = user;
+        return res.status(200).json(successResponseBody)
 
-module.exports = {signUp,signIn}
+    }
+    catch(error){
+        if(error.err){
+            errorResponseBody.error = error.err;
+            return res.status(error.code).json(errorResponseBody)
+        }
+        errorResponseBody.error = error;
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+
+module.exports = {signUp,signIn,resetPassword}
