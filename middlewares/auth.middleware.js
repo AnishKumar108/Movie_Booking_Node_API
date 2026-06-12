@@ -76,4 +76,34 @@ const validateResetPasswordRequest = (req,res,next) => {
     next()
 }
 
-module.exports = {checkSignupRequest,checkSignInRequest,isAuthenticated,validateResetPasswordRequest}
+const isAdmin = async(req,res,next) => {
+    const user = await authService.getuserbyId(req.user);
+    if(user.userRole !== "ADMIN"){
+        errorResponseBody.error = "Invalid userRole, only admin is allowed";
+        return res.status(401).json(errorResponseBody)
+    }
+    next()
+
+}
+
+const isClient = async(req,res,next) => {
+    const user = await authService.getuserbyId(req.user);
+    if(user.userRole !== "CLIENT"){
+        errorResponseBody.error = "Invalid userRole, only client is allowed";
+        return res.status(401).json(errorResponseBody)
+    }
+    next()
+}
+
+const isAdminOrClient = async (req,res,next) => {
+    const user = await authService.getuserbyId(req.user);
+    if(user.userRole !== "ADMIN" && user.userRole !== "CLIENT"){
+        errorResponseBody.error = "Invalid userRole, only client or admin is allowed";
+        return res.status(401).json(errorResponseBody)
+    }
+    next();
+}
+
+
+
+module.exports = {checkSignupRequest,checkSignInRequest,isAuthenticated,validateResetPasswordRequest,isAdmin,isClient,isAdminOrClient};
