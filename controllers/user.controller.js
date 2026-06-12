@@ -3,9 +3,9 @@ const {successResponseBody,errorResponseBody} = require("../utils/responseBody")
 
 const update = async(req,res) => {
     try{
-        const response=await authService.updateUserRoleOrStatus(req.body,req.params.id);
-        successResponseBody.message = "Succesfully update iser role or status";
-        successResponseBody.data = response;
+        const response = await authService.updateUserRoleOrStatus(req.body,req.params.id);
+        successResponseBody.data  = response;
+        successResponseBody.message = "Succesfully update the given user";
         return res.status(200).json(successResponseBody)
 
     }
