@@ -1,4 +1,5 @@
 const Theatre = require("../models/theatre.model");
+const {STATUS} = require("../utils/constants")
 
 const createTheatre = async (data) => {
   try {
@@ -11,7 +12,7 @@ const createTheatre = async (data) => {
         err[key] = error.errors[key].message;
       });
       console.log(err);
-      return { err: err, code: 422 };
+      throw { err: err, code: STATUS.UNPROCESSABLE_ENTITY };
     } else {
       throw error;
     }

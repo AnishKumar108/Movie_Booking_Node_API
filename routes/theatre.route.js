@@ -3,7 +3,7 @@ const theatreController = require("../controllers/theatre.controller")
 const authMiddleware = require("../middlewares/auth.middleware")
 
 const routes = (app) => {
-    app.post("/mba/api/v1/theatres",checkCreateTheatreRequest,theatreController.create);
+    app.post("/mba/api/v1/theatres",authMiddleware.isAuthenticated,authMiddleware.isAdminOrClient,checkCreateTheatreRequest,theatreController.create);
     app.delete("/mba/api/v1/theatres/:id",authMiddleware.isAuthenticated,theatreController.destroy);
     app.get("/mba/api/v1/theatres/:id",theatreController.getTheatre);
     app.get("/mba/api/v1/theatres",theatreController.getTheatres)
