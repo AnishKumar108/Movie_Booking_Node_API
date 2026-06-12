@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
 const { errorResponseBody } = require("../utils/responseBody");
+const {STATUS} = require("../utils/constants")
 
 const createUser = async (data) => {
   try {
@@ -22,7 +23,7 @@ const getUserByEmail = async(email) => {
     try{
         const response = await User.findOne({email});
         if(!response){
-            throw {err:"No User found with given email id", code:404}
+            throw {err:"No User found with given email id", code:STATUS.NOT_FOUND}
         }
         return response
     }
@@ -36,7 +37,7 @@ const getuserbyId = async(id) => {
     const response = await User.findById(id);
     
     if(!response){
-      throw{err:"No user found with given id",code:404}
+      throw{err:"No user found with given id",code:STATUS.NOT_FOUND}
     }
     return response
   }
@@ -56,7 +57,7 @@ const updateUserRoleOrStatus = async(data,userId) => {
     }
     const response = await User.findByIdAndUpdate(userId,responseQuery,{new:true,runValidators:true});
     if(!response){
-      throw {err:"No user found with given user Id",code:404}
+      throw {err:"No user found with given user Id",code:STATUS.NOT_FOUND}
     }
     return response;
   }
@@ -67,7 +68,7 @@ const updateUserRoleOrStatus = async(data,userId) => {
         err[key] = error.errors[key].message;
       });
       console.log(err);
-      throw { err: err, code: 422 };
+      throw { err: err, code: STATUS.UNPROCESSABLE_ENTITY };
     }
     
     throw error
