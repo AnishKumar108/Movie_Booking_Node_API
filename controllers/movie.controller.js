@@ -1,6 +1,7 @@
 const movieModel = require("../models/movie.model")
 const movieService = require("../services/movie.service")
 const {errorResponseBody,successResponseBody} = require("../utils/responseBody")
+const {STATUS} =require("../utils/constants")
 
 
 
@@ -9,39 +10,40 @@ const createMovie = async(req,res) => {
     try{
         
          const response = await movieService.createMovie(req.body)
-         if(response.err){
-            errorResponseBody.error = response.err
-            errorResponseBody.message = "Validation Error, something invalid coming from request body "
-            return res.status(response.code).json(errorResponseBody)
-         }
+         
          successResponseBody.message = "Succesfully Created the movie"
          successResponseBody.data = response
-         return res.status(201).json(successResponseBody)
+         return res.status(STATUS.CREATED).json(successResponseBody)
 
     }
-    catch(err){
-           console.log(err)
-           errorResponseBody.error  = err
-           return res.status(500).json(errorResponseBody)
+    catch(error){
+           if(error.err){
+            errorResponseBody.error = error.err;
+            return res.status(error.code).json(errorResponseBody)
+           }
+           console.log(error)
+           errorResponseBody.error  = error
+           return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
     }
 }
 
 const deleteMovie = async(req,res) => {
     try{
         const response = await movieService.deleteMovie(req.params.movieId)
-        if(response.err){
-            errorResponseBody.error = response.err
-            return res.status(response.code).json(errorResponseBody)
-        }
+        
         successResponseBody.data = response
         successResponseBody.message = "Succesfully deleted the movie"
-        return res.status(200).json(successResponseBody)
+        return res.status(STATUS.OK).json(successResponseBody)
     }
 
     
-    catch(err){
-        errorResponseBody.error = err
-        return res.status(500).json(errorResponseBody)
+    catch(error){
+        if(error.err){
+            errorResponseBody.error = error.err;
+            return res.status(error.code).json(errorResponseBody)
+        }
+        errorResponseBody.error = error
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
     }
 }
 
@@ -68,18 +70,18 @@ const getMovieById = async(req,res) => {
 const updateMovie = async(req,res) => {
     try{
         const response = await movieService.updateMovie(req.params.id,req.body)
-        if (response.err){
-            errorResponseBody.error = response.err
-            
-            return res.status(response.code).json(errorResponseBody)
-        }
+        
         successResponseBody.data = response
-        return res.status(200).json(successResponseBody)
+        return res.status(STATUS.OK).json(successResponseBody)
     }
     catch(err){
+         if(error.err){
+            errorResponseBody.error = error.err;
+            return res.status(error.code).json(errorResponseBody)
+        }
         console.log(err)
         errorResponseBody.error = err
-        return res.status(500).json(errorResponseBody)
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
     }
 }
 

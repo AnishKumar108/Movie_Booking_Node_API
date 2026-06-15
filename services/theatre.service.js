@@ -22,7 +22,7 @@ const createTheatre = async (data) => {
 const destroyTheatre = async (id) => {
   const response = await Theatre.findByIdAndDelete(id);
   if (!response) {
-    return { err: "Cannot find theatre with given id", code: 404 };
+    throw { err: "Cannot find theatre with given id", code: STATUS.NOT_FOUND };
   }
   return response;
 };
@@ -30,9 +30,9 @@ const destroyTheatre = async (id) => {
 const getTheatre = async (id) => {
   const response = await Theatre.findById(id);
   if (!response) {
-    return {
+    throw {
       err: "Bad Request error",
-      code: 404,
+      code: STATUS.NOT_FOUND,
     };
   }
   return response;
@@ -83,7 +83,7 @@ const updateTheatre = async (id, data) => {
     });
 
     if (!response) {
-      return { err: "Not Found Theatre with given id", code: 404 };
+      throw { err: "Not Found Theatre with given id", code: STATUS.NOT_FOUND };
     }
     return response;
   } catch (error) {
@@ -94,7 +94,7 @@ const updateTheatre = async (id, data) => {
         err[key] = error.errors[key].message;
       });
       console.log(err);
-      return { err: err, code: 422 };
+      return { err: err, code: STATUS.UNPROCESSABLE_ENTITY };
     } else {
       throw error;
     }

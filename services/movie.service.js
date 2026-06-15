@@ -1,5 +1,6 @@
 const movieModel = require("../models/movie.model")
-const { successResponseBody } = require("../utils/responseBody")
+const { successResponseBody } = require("../utils/responseBody");
+const {STATUS} = require("../utils/constants")
 
 const createMovie = async(data) => {
     try{
@@ -13,7 +14,7 @@ const createMovie = async(data) => {
                 err[key] = error.errors[key].message
              })
              console.log(err)
-             return {err:err,code:422}
+             return {err:err,code:STATUS.UNPROCESSABLE_ENTITY}
         }
         else{
             throw error
@@ -25,9 +26,9 @@ const deleteMovie = async(id) => {
     const response = await movieModel.findByIdAndDelete(id)
    
     if(!response){
-        return {
+        throw {
             err:"Cannot find the movie corresponding to given id",
-            code:404
+            code:STATUS.BAD_REQUEST
         }
     }
     return response
@@ -51,7 +52,7 @@ const updateMovie = async(id, data) => {
     try{
         const movie = await movieModel.findByIdAndUpdate(id,data,{new:true,runValidators:true})
         if(!movie){
-            return {err:"Not found movie with given id" , code:404}
+            throw {err:"Not found movie with given id" , code:STATUS.BAD_REQUEST}
         }
 
         return movie
@@ -64,7 +65,7 @@ const updateMovie = async(id, data) => {
                 err[key] = error.errors[key].message
              })
              console.log(err)
-             return {err:err,code:422}
+             throw {err:err,code:STATUS.UNPROCESSABLE_ENTITY}
         }
         else{
             throw error
