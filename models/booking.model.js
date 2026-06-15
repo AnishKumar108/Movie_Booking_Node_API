@@ -8,7 +8,7 @@ const bookingSchema = new mongoose.Schema({
         required:true
     },
     movieId:{
-        type:mongoose.Schema.types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"Movie",
         required:true
     },
@@ -22,7 +22,8 @@ const bookingSchema = new mongoose.Schema({
         required:true
     },
     noOfSeats:{
-        type:Number
+        type:Number,
+        required:true
     },
     status:{
         type:String,

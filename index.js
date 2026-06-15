@@ -6,6 +6,7 @@ const movieRoute = require("./routes/movie.route")
 const theatreRoute = require("./routes/theatre.route")
 const authRoute = require("./routes/auth.route")
 const userRoute = require("./routes/user.route")
+const bookingRoute = require("./routes/booking.route")
 const env = require("dotenv")
 env.config()
 
@@ -18,6 +19,7 @@ movieRoute(app);
 theatreRoute(app);
 authRoute(app);
 userRoute(app);
+bookingRoute(app);
 
 app.get("/home" , (req,res) => {
     console.log("Hitted Homes")
