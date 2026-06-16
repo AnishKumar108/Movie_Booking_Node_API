@@ -58,4 +58,22 @@ const getAllBookings = async() => {
   }
 }
 
-module.exports = { createBooking,updateBooking,getBookings,getAllBookings};
+const getBookingById = async(bookingId,userId) => {
+  try{
+    const response = await Booking.findById(bookingId);
+    if(!response){
+      throw {err:"No booking found with given booking id" , code:STATUS.NOT_FOUND}
+    }
+    
+    if(!response.userId.equals(userId)){
+      throw {err:"You are not eligible to see this booking detail",code:STATUS.UNAUTHORISED}
+    }
+    return response
+  }
+  catch(error){
+    console.log(error);
+    throw error
+  }
+}
+
+module.exports = { createBooking,updateBooking,getBookings,getAllBookings,getBookingById};
