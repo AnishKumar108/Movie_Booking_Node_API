@@ -37,4 +37,30 @@ const update = async(req,res) => {
         return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
     }
 }
-module.exports = {create,update}
+
+const Bookings = async(req,res) => {
+    try{
+        const response = await bookingService.getBookings({userId:req.user});
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully fetched all the bookings of logged in user";
+        return res.status(STATUS.OK).json(successResponseBody)
+    }
+    catch(error){
+        errorResponseBody.error = error;
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
+    }
+}
+
+const allBookings = async(req,res) => {
+    try{
+        const response = await bookingService.getAllBookings();
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully fetched all the bookings";
+        return res.status(STATUS.OK).json(successResponseBody)
+    }
+    catch(error){
+        errorResponseBody.error = error;
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
+    }
+}
+module.exports = {create,update,Bookings,allBookings}
