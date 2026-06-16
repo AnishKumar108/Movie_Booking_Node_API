@@ -42,4 +42,13 @@ const validCreateShowRequest = (req,res,next) => {
 
 }
 
-module.exports = {validCreateShowRequest}
+const validateUpdateShowRequest = async(req,res,next) => {
+    if(req.body.theatreId || req.body.movieId){
+        errorResponseBody.error = "You cannot update theatre or movie of already created show";
+        return res.status(STATUS.BAD_REQUEST).json(errorResponseBody)
+    }
+
+    next();
+}
+
+module.exports = {validCreateShowRequest,validateUpdateShowRequest}
