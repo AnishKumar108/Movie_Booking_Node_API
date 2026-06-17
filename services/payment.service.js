@@ -1,12 +1,18 @@
 const Payment = require("../models/payment.model");
 const Booking = require("../models/booking.model");
 const {STATUS,BOOKING_STATUS,PAYMENT_STATUS} = require("../utils/constants");
+const { successResponseBody } = require("../utils/responseBody");
 
 const createPayment =  async(data) => {
     try{
         const booking = await Booking.findById(data.bookingId)
         if(!booking){
             throw {err:"No booking found for the given bookng id",code:STATUS.BAD_REQUEST}
+        }
+        if(booking.status === BOOKING_STATUS.successfull){
+            throw{
+                err:"Booking is already successfull , cannot create booking against it",code :STATUS.FORBIDDEN
+            }
         }
 
         const bookingTime = booking.createdAt;
@@ -42,4 +48,18 @@ const createPayment =  async(data) => {
     }
 }
 
-module.exports = {createPayment}
+const getPaymentById = async(id) => {
+    try{
+        const response =  await Payment.findById(id).populate("bookingId");
+        if(!response){
+            throw {err:"No payment record found for given payment id",code:STATUS.NOT_FOUND}
+        }
+        return response
+    }
+    catch(error){
+        console.log(error);
+        throw error
+    }
+}
+
+module.exports = {createPayment,getPaymentById}
