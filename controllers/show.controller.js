@@ -1,0 +1,73 @@
+const showService = require("../services/show.service");
+const {STATUS} = require("../utils/constants");
+const {successResponseBody,errorResponseBody} = require("../utils/responseBody")
+
+const create = async(req,res) => {
+    try{
+        const response = await showService.createShow(req.body);
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully created the show";
+        return res.status(STATUS.CREATED).json(successResponseBody)
+    }
+    catch(error){
+        if(error.err){
+            errorResponseBody.error = error.err;
+            return res.status(error.code).json(errorResponseBody)
+        }
+        errorResponseBody.error = error;
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
+    }
+}
+
+const getShows = async(req,res) => {
+    try{
+        const response = await showService.getShows(req.query);
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully get all shows";
+        return res.status(STATUS.OK).json(successResponseBody)
+    }
+    catch(error){
+        if(error.err){
+            errorResponseBody.error = error.err;
+            return res.status(error.code).json(errorResponseBody)
+        }
+        errorResponseBody.error = error;
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
+    }
+}
+
+const update = async(req,res) => {
+    try{
+        const response = await showService.updateShow(req.params.id,req.body);
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully updated the given show";
+        return res.status(STATUS.OK).json(successResponseBody)
+    }
+    catch(error){
+        if(error.err){
+            errorResponseBody.error = error.err;
+            return res.status(error.code).json(errorResponseBody);
+        }
+        errorResponseBody.error = error;
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
+    }
+}
+
+const destroy = async(req,res) => {
+    try{
+        const response = await showService.destroyShow(req.params.id);
+        successResponseBody.data = response;
+        successResponseBody.message = "Succefully deleted the given show";
+        return res.status(STATUS.OK).json(successResponseBody)
+    }
+    catch(error){
+        if(error.err){
+            errorResponseBody.error = error.err;
+            return res.status(error.code).json(errorResponseBody)
+        }
+        errorResponseBody.error = error;
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody)
+    }
+}
+
+module.exports  = {create,getShows,update,destroy}
