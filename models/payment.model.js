@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const {PAYMENT_STATUS} = require("../utils/constants")
 
-const paymentSchema = new mongoose.model({
+const paymentSchema = new mongoose.Schema({
     bookingId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"booking",

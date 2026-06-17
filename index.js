@@ -7,7 +7,8 @@ const theatreRoute = require("./routes/theatre.route")
 const authRoute = require("./routes/auth.route")
 const userRoute = require("./routes/user.route")
 const bookingRoute = require("./routes/booking.route")
-const showRoute = require("./routes/show.route")
+const showRoute = require("./routes/show.route");
+const paymentRoute = require("./routes/payment.route")
 const env = require("dotenv")
 env.config()
 
@@ -22,6 +23,7 @@ authRoute(app);
 userRoute(app);
 bookingRoute(app);
 showRoute(app)
+paymentRoute(app)
 
 app.get("/home" , (req,res) => {
     console.log("Hitted Homes")
