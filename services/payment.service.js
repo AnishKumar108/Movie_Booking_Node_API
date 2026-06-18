@@ -1,6 +1,7 @@
 const Payment = require("../models/payment.model");
 const Booking = require("../models/booking.model");
-const {STATUS,BOOKING_STATUS,PAYMENT_STATUS} = require("../utils/constants");
+const User = require("../models/user.model")
+const {STATUS,BOOKING_STATUS,PAYMENT_STATUS, USER_ROLE} = require("../utils/constants");
 const { successResponseBody } = require("../utils/responseBody");
 
 const createPayment =  async(data) => {
@@ -62,4 +63,23 @@ const getPaymentById = async(id) => {
     }
 }
 
-module.exports = {createPayment,getPaymentById}
+const getAllPayments = async(userId) => {
+    try{
+        let user = await User.findById(userId);
+        let filter = {}
+        if(user.userRole !== USER_ROLE.admin){
+            filter.userId = user.id
+        }
+        const bookings = await Booking.find(filter,{_id:1});
+        
+        const payment = await Payment.find({bookingId:{$in: bookings}});
+        
+        return payment;
+    }
+    catch(error){
+        console.log(error)
+        throw error;
+    }
+}
+
+module.exports = {createPayment,getPaymentById,getAllPayments}
