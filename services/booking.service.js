@@ -1,8 +1,14 @@
 const Booking = require("../models/booking.model")
+const Show = require("../models/show.model")
 const{STATUS} = require("../utils/constants")
 
 const createBooking = async (data) => {
   try {
+        const show  = await Show.findOne({theatreId:data.theatreId,movieId:data.movieId,timing:data.timing});
+        if(!show){
+          throw {err:"No show found for booking" ,code:STATUS.NOT_FOUND}
+        }
+        data.totalCost = show.price*data.noOfSeats;
         const response = await Booking.create(data);
         return response;
     } 
