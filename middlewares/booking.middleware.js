@@ -38,7 +38,7 @@ const validateCreateBookingRequest = async(req,res,next) => {
         return res.status(STATUS.NOT_FOUND).json(errorResponseBody)
     }
 
-    if(!req.body.timings){
+    if(!req.body.timing){
         errorResponseBody.error = "No timing provided for booking";
         return res.status(STATUS.BAD_REQUEST).json(errorResponseBody)
     }

@@ -9,6 +9,7 @@
   "author": "Anish Kumar",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.18.0",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.2",
     "dotenv": "^17.4.2",
